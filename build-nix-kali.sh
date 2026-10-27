@@ -1,5 +1,4 @@
 #!/bin/bash
-# build-nix-kali.sh — builds the NIX KALI ISO
 set -euo pipefail
 
 NAME="NIX KALI"
@@ -9,7 +8,7 @@ OUT="$HOME/nixkali-out"
 
 echo "[*] installing build deps..."
 apt update
-apt install -y git live-build cdebootstrap devscripts python3-pil xorriso squashfs-tools zip
+apt install -y git live-build cdebootstrap debootstrap devscripts fakeroot fakechroot python3-pil xorriso squashfs-tools zip
 
 rm -rf "$OUT"; mkdir -p "$OUT"
 WORK="$HOME/nixkali-build"
