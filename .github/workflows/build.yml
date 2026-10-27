@@ -4,26 +4,20 @@ on: [workflow_dispatch]
 jobs:
   iso:
     runs-on: ubuntu-latest
-    container:
-      image: kalilinux/kali-last-release
-      options: --privileged
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fix Kali Keys and Install Deps
+      - name: Run Build in Kali Docker
         run: |
-          apt update || true
-          apt install -y wget gnupg
-          wget -q -O - https://archive.kali.org/archive-key.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/kali-archive-keyring.gpg
-          apt update
-          apt install -y git live-build cdebootstrap debootstrap devscripts fakeroot fakechroot python3-pil xorriso squashfs-tools zip
-
-      - name: Build ISO
-        run: |
-          bash build-nix-kali.sh
+          docker run --privileged -v "$PWD:/work" -w /work kalilinux/kali-rolling /bin/bash -c "
+            apt-get update && \
+            apt-get install -y git live-build cdebootstrap debootstrap devscripts fakeroot fakechroot python3-pil xorriso squashfs-tools zip wget gnupg && \
+            bash build-nix-kali.sh && \
+            chown -R 1000:1000 /work
+          "
 
       - uses: actions/upload-artifact@v4
         with:
           name: nixkali-iso
-          path: /root/nixkali-out/*.iso
+          path: nixkali-out/*.iso
           retention-days: 7
