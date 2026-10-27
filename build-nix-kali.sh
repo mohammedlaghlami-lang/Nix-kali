@@ -1,6 +1,5 @@
 #!/bin/bash
-# build-nix-kali.sh — يبني ISO كالي مخصص اسمه NIX KALI
-# شغّله على كالي أو Debian. مش على تيرمكس.
+# build-nix-kali.sh — builds the NIX KALI ISO
 set -euo pipefail
 
 NAME="NIX KALI"
@@ -8,16 +7,9 @@ HOST="nixkali"
 VARIANT="nixkali"
 OUT="$HOME/nixkali-out"
 
-. /etc/os-release
-case "$ID" in
-  kali|debian) echo "[*] distro: $ID — ok" ;;
-  *) echo "[!] needed kali/debian. got: $ID"; exit 1 ;;
-esac
-
 echo "[*] installing build deps..."
 apt update
-apt install -y git live-build cdebootstrap devscripts python3-pil \
-               xorriso squashfs-tools
+apt install -y git live-build cdebootstrap devscripts python3-pil xorriso squashfs-tools zip
 
 rm -rf "$OUT"; mkdir -p "$OUT"
 WORK="$HOME/nixkali-build"
