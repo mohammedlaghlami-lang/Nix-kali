@@ -4,18 +4,23 @@ on: [workflow_dispatch]
 jobs:
   iso:
     runs-on: ubuntu-latest
+    container:
+      image: kalilinux/kali-rolling
+      options: --privileged
     steps:
       - uses: actions/checkout@v4
+
       - name: deps
         run: |
-          sudo apt update
-          sudo apt install -y git live-build cdebootstrap devscripts python3-pil xorriso squashfs-tools
+          apt update
+          apt install -y git live-build cdebootstrap devscripts python3-pil xorriso squashfs-tools zip
+
       - name: build
         run: |
-          sudo bash build-nix-kali.sh
-          sudo chown -R $USER:$USER ~/nixkali-out
+          bash build-nix-kali.sh
+
       - uses: actions/upload-artifact@v4
         with:
           name: nixkali-iso
-          path: ~/nixkali-out/*.iso
+          path: /root/nixkali-out/*.iso
           retention-days: 7
