@@ -4,14 +4,14 @@ set -euo pipefail
 NAME="NIX KALI"
 HOST="nixkali"
 VARIANT="nixkali"
-OUT="$HOME/nixkali-out"
+OUT="$(pwd)/nixkali-out"
 
 echo "[*] installing build deps..."
-apt update
-apt install -y git live-build cdebootstrap debootstrap devscripts fakeroot fakechroot python3-pil xorriso squashfs-tools zip
+apt-get update
+apt-get install -y git live-build cdebootstrap debootstrap devscripts fakeroot fakechroot python3-pil xorriso squashfs-tools zip
 
 rm -rf "$OUT"; mkdir -p "$OUT"
-WORK="$HOME/nixkali-build"
+WORK="$(pwd)/nixkali-build"
 rm -rf "$WORK"; mkdir -p "$WORK"
 cd "$WORK"
 
